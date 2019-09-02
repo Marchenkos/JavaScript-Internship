@@ -1,66 +1,72 @@
 let MyArray={
-  
-    take(array, n){
+
+    array: [],
+
+    chain(array){
+     this.array=array;
+     return this;
+    },
+
+    take (n){
         let newArray=[];
         for(let i=0;i<n;i++)
         {
-            newArray[i]=array[i];
+            newArray[i] = this.array[i];
         }
-        return newArray;
+        this.array=newArray;
+        return this;
     },
-    map(array, callback){
+    map(callback){
         let newArray=[];
-        for(let i=0;i<array.length;i++){
-        newArray[i]=callback(array[i]);
+        for(let i=0;i<this.array.length;i++){
+            newArray[i]=callback(this.array[i]);
         }
-        return newArray;
+        this.array=newArray;
+        return this;
     },
-    skip(array, n){
+    skip(n){
         let newArray=[];
-        for(let i=n, j=0;i<array.length;i++, j++)
+
+        for(let i=n, j=0;i<this.array.length;i++, j++)
         {
-            newArray[j]=array[i];
+            newArray[j]=this.array[i];
         }
-        return newArray;
+        this.array=newArray;
+        return this;
     },
-    filter(array, callback){
+    filter(callback){
         let newArray=[];
+
         let j=0;
-        for(let i=0;i<array.length;i++)
+        for(let i=0;i<this.array.length;i++)
         {
             if(callback(array[i]))
             {
-                newArray[j]=array[i];
+                newArray[j]=this.array[i];
                 j++;
             }
         }
-        return newArray;
+        this.array=newArray;
+
+        return this;
     },
 
-    foreach(array, callback){
-        for(let i=0;i<array.length;i++){
-        array[i]=callback(array[i]);
+    foreach(callback){
+        let newArray=[];
+
+        for(let i=0;i<this.array.length;i++){
+            newArray[i]=callback(this.array[i]);
         }
-        return array;
-    },
-    // reduce(array, callback, initialValue=0){
-    //     let accumulator, currentValue
-    //     initialValue==0 ? {accumulator=array[0], currentValue = array[1] }:{accumulator=initialValue, currentValue = array[0] };
-        
-    //     for(let i=0;i<array.length;i++){
-    //         callback(accumulator, currentValue);
-    //     }
-    //     return array;
-    // }
+        this.array=newArray;
 
+        return this;
+    },
+    value(){
+        return this.array;
+    }
+ 
 
 
 }
 
-console.log(MyArray.take([1,2,3,4,5,6,7], 4));
-console.log(MyArray.map([1,2,3], a=>2*a));
-console.log(MyArray.skip([1,2,3,4,5,6,7], 2));
-
-var words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
-console.log(MyArray.filter(words, word => word.length > 6));
-console.log(MyArray.foreach([1,2,3], a=>2*a));
+console.log(MyArray.chain([1,2,3]).take(2).foreach(a=>2*a).skip(1).value());
