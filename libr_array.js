@@ -7,55 +7,81 @@ let MyArray={
      return this;
     },
 
-    take (n){
+    take (n, arrayValue=this.array){
         let newArray=[];
         for(let i=0;i<n;i++)
         {
-            newArray[i] = this.array[i];
+            newArray[i] = arrayValue[i];
         }
+     if(this.array!=arrayValue)
+     {
+        this.array=newArray;
+        return this.array;
+     }
         this.array=newArray;
         return this;
     },
-    map(callback){
+    map(callback,arrayValue=this.array){
         let newArray=[];
-        for(let i=0;i<this.array.length;i++){
-            newArray[i]=callback(this.array[i]);
+        for(let i=0;i<arrayValue.length;i++){
+            newArray[i]=callback(arrayValue[i]);
+        }
+        if(this.array!=arrayValue)
+        {
+           this.array=newArray;
+           return this.array;
         }
         this.array=newArray;
         return this;
     },
-    skip(n){
+    skip(n,arrayValue=this.array){
         let newArray=[];
 
-        for(let i=n, j=0;i<this.array.length;i++, j++)
+        for(let i=n, j=0;i<arrayValue.length;i++, j++)
         {
-            newArray[j]=this.array[i];
+            newArray[j]=arrayValue[i];
+        }
+        if(this.array!=arrayValue)
+        {
+           this.array=newArray;
+           return this.array;
         }
         this.array=newArray;
+
         return this;
     },
-    filter(callback){
+    filter(callback,arrayValue=this.array){
         let newArray=[];
 
         let j=0;
-        for(let i=0;i<this.array.length;i++)
+        for(let i=0;i<arrayValue.length;i++)
         {
-            if(callback(array[i]))
+            if(callback(arrayValue[i]))
             {
-                newArray[j]=this.array[i];
+                newArray[j]=arrayValue[i];
                 j++;
             }
+        }
+        if(this.array!=arrayValue)
+        {
+           this.array=newArray;
+           return this.array;
         }
         this.array=newArray;
 
         return this;
     },
 
-    foreach(callback){
+    foreach(callback,arrayValue=this.array){
         let newArray=[];
 
-        for(let i=0;i<this.array.length;i++){
-            newArray[i]=callback(this.array[i]);
+        for(let i=0;i<arrayValue.length;i++){
+            newArray[i]=callback(arrayValue[i]);
+        }
+        if(this.array!=arrayValue)
+        {
+           this.array=newArray;
+           return this.array;
         }
         this.array=newArray;
 
@@ -69,4 +95,11 @@ let MyArray={
 
 }
 
-console.log(MyArray.chain([1,2,3]).take(2).foreach(a=>2*a).skip(1).value());
+console.log(MyArray.chain([1,2,3]).take(2).map(a=>2*a).skip(1).value());
+console.log(MyArray.take(4,[1,2,3,4,5,6,7]));
+console.log(MyArray.map(a=>2*a,[1,2,3,4,5,6,7]));
+console.log(MyArray.skip( 2,[1,2,3,4,5,6,7]));
+
+var words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
+console.log(MyArray.filter( word => word.length > 6,words));
+console.log(MyArray.foreach( a=>2*a,[1,2,3]));
