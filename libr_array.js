@@ -90,8 +90,6 @@ let MyArray={
     value(){
         return this.array;
     }
- 
-
 
 }
 
@@ -103,3 +101,34 @@ console.log(MyArray.skip( 2,[1,2,3,4,5,6,7]));
 var words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
 console.log(MyArray.filter( word => word.length > 6,words));
 console.log(MyArray.foreach( a=>2*a,[1,2,3]));
+
+function q(array){
+    for(key in array)
+    {
+        array[key]=array[key]*array[key];
+    }
+    return array;
+}
+
+const memoize = (fn)=>{
+    let cacheValues={};
+   return (...args)=>{
+    let n = args[0];  // тут работаем с единственным аргументом
+
+       if(n in cacheValues){
+           console.log("from cache");
+           return cacheValues[n];
+       }
+       else{
+        let result=fn(n);
+        cacheValues[n]= result;
+                console.log("calculating");
+ 
+        return result;
+       }
+
+   }
+}
+const memoizedAdd = memoize(q);
+console.log(memoizedAdd([1,2,3]));  // вычислено
+console.log(memoizedAdd([1,2,3]));  // взято из кэша
