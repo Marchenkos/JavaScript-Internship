@@ -94,7 +94,7 @@ let MyArray = {
     }
 }
 
-function squared(array) {
+const squared = (array) => {
     let newArray = [];
 
     for(let i = 0; i < array.length; i++) {
@@ -104,19 +104,18 @@ function squared(array) {
     return newArray;
 }
 
-const memoize = () => {
+const memoize = (fn) => {
     let cacheValues = new Map();
 
     return (array) => {
-       if(cacheValues.get(array.toString())) {
+       if(cacheValues.has(array.toString())) {
            console.log("From cache");
 
            return cacheValues.get(array.toString());
        }
-
        else {
            console.log("Calculating");
-           let result = squared(array);
+           let result = fn(array);
            cacheValues.set(array.toString(), result);
            
            return result;
@@ -131,7 +130,7 @@ console.log(MyArray.skip(2, [1,2,3,4,5,6,7]));
 var words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
 console.log(MyArray.filter(word => word.length > 6, words));
 console.log(MyArray.foreach(a => 2 * a, [1,2,3]));
-const memoizedAdd = memoize();
+const memoizedAdd = memoize(squared);
 console.log(memoizedAdd([1,2,3]));  
 console.log(memoizedAdd([1,5,3]));  
 console.log(memoizedAdd([1,2,3]));  
