@@ -72,7 +72,7 @@ let MyArray = {
 
         return this;
     },
-
+    
     foreach(callback, arrayValue = this.array) {
         let newArray = [];
 
