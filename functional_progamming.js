@@ -18,8 +18,85 @@ function cylinderArea(pi) {
     }
 }
 
+function map(array, callback) {
+    let newArray = [];
+
+    for(key in array) {
+        newArray.push(callback(array[key]));
+    }
+    
+    return newArray;
+}
+
+function filter(array, callback) {
+    let newArray = [];
+
+    for(key in array) {
+        if(callback(array[key])) {
+            newArray.push(array[key])
+        }
+    }
+    
+    array = newArray;
+    return array;
+}
+
+function average(array) {
+    let averageValue = 0;
+
+    for(key in array) {
+        averageValue = averageValue + array[key];
+    }
+
+    return averageValue / array.length;
+}
+
+function averageOfEven(array) {
+    return (f1) => {
+        let evenArray = f1(array, a => a % 2 == 0);
+
+        return (f2) => {
+           return f2(evenArray);
+        }
+    }
+}
+
+function createMemoizedFunction(f) {
+    return (memoize) => {
+        let mem = memoize(f);
+
+        return mem([1,2,3]);
+    }
+}
+
+function memoize(fn) {
+    let cacheValues = new Map();
+
+    return (...argms) => {
+        let parameters = [];
+        parameters = argms[0];
+
+        if(cacheValues.has(parameters.toString())) {
+           console.log("From cache");
+
+           return cacheValues.get(parameters.toString());
+        }
+        else {
+           console.log("Calculating");
+           let result = fn(parameters);
+           cacheValues.set(parameters.toString(), result);
+           
+           return result;
+        }
+    }
+}
+
 let areaCalculation = cylinderArea(3.14);
 console.log(areaCalculation(4, 5));
 console.log(areaCalculation(14, 50));
 let result = cury(pureFunction);
-console.log(result(2)(3)(5));
+console.log(map([1,2,3], (a) => a - 1));
+console.log(filter([11,2,30], (a) => a > 10));
+// let result2 = averageOfEven([1,2,3,4,5])(filter)(average);
+// console.log(result2);
+console.log(createMemoizedFunction(average)(memoize));
