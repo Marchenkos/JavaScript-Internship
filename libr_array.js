@@ -84,7 +84,7 @@ let MyArray = {
 
         return this;
     },
-
+    
     foreach(callback, arrayValue = this.array) {
         let newArray = [];
 
@@ -113,3 +113,37 @@ console.log(MyArray.skip(2, [1,2,3,4,5,6,7]));
 var words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
 console.log(MyArray.filter(word => word.length > 6, words));
 console.log(MyArray.foreach(a => 2 * a, [1,2,3]));
+
+function squared(array) {
+    let newArray = [];
+
+    for(let i = 0; i < array.length; i++) {
+        newArray[i] = array[i] * array[i];
+    }
+
+    return newArray;
+}
+
+const memoize = () => {
+    let cacheValues = new Map();
+
+    return (array) => {
+
+       if(cacheValues.has('array')) {
+           console.log("from cache");
+
+           return cacheValues.get('array');
+       }
+
+       else {
+           console.log("calculating");
+           let result = squared(array);
+           cacheValues.set('array', result);
+           
+           return result;
+       }
+   }
+}
+const memoizedAdd = memoize();
+console.log(memoizedAdd([1,2,3]));  
+console.log(memoizedAdd([1,2,3]));  
