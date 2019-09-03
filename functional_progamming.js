@@ -91,6 +91,17 @@ function memoize(fn) {
     }
 }
 
+function multiplicationOfParameters(f) {
+    return (...argms) => {
+        let mult = 1;
+        for(let i = 0; i < argms.length; i++) {
+            mult = mult * argms[i];
+        }
+
+        return mult;
+    }
+}
+
 let areaCalculation = cylinderArea(3.14);
 console.log(areaCalculation(4, 5));
 console.log(areaCalculation(14, 50));
@@ -100,3 +111,7 @@ console.log(filter([11,2,30], (a) => a > 10));
 // let result2 = averageOfEven([1,2,3,4,5])(filter)(average);
 // console.log(result2);
 console.log(createMemoizedFunction(average)(memoize));
+
+let mult = multiplicationOfParameters(pureFunction);
+
+console.log(mult(10, 2, 30));
