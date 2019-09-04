@@ -51,12 +51,28 @@ function average(array) {
     return averageValue / array.length;
 }
 
+function folding(array, callback, initialValue) {
+    let lastValue = 0;
+
+    if(initialValue) {
+        lastValue = initialValue;
+    }
+
+    for(key in array) {
+        lastValue = callback(lastValue, array[key]);
+    }
+
+    return lastValue;
+}
+
 function averageOfEven(array) {
     return (f1) => {
         let evenArray = f1(array, a => a % 2 == 0);
 
         return (f2) => {
-           return f2(evenArray);
+           let result = f2(evenArray, (a, b) => a + b);
+
+           return result / evenArray.length;
         }
     }
 }
@@ -108,10 +124,9 @@ console.log(areaCalculation(14, 50));
 let result = cury(pureFunction);
 console.log(map([1,2,3], (a) => a - 1));
 console.log(filter([11,2,30], (a) => a > 10));
-// let result2 = averageOfEven([1,2,3,4,5])(filter)(average);
-// console.log(result2);
+let result2 = averageOfEven([1,2,3,4,5])(filter)(folding);
+console.log(result2);
 console.log(createMemoizedFunction(average)(memoize));
-
 let mult = multiplicationOfParameters(pureFunction);
-
 console.log(mult(10, 2, 30));
+console.log(folding([1,2,3,4], (a, b) => a + b));
