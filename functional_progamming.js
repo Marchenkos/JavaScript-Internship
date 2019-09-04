@@ -1,3 +1,4 @@
+{
 function pureFunction(x, y, z) {
     return (x + y + z) * 10;
 }
@@ -226,3 +227,4 @@ console.log("Area: " + square1.calculateArea() + "\nSide length: " + square1.sid
 let store = new ShapesStore([rectangle1, square1, square2, rectangle2, square3]);
 console.log("Total area of square: " + store.areaSquare());
 console.log("Total area of rectangle: " + store.areaRectangle());
+}
