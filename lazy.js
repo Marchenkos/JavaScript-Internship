@@ -10,16 +10,17 @@ function forLazy(arrayPar, n) {
     return newArray; 
 } 
     
-let lazy = function(action, array) { 
+function lazy(action) { 
     let arrayPar = [];
 
-    for(let i = 0; i < arguments.length - 1; i++) {
+    for(let i = 1; i < arguments.length; i++) {
         arrayPar.push(arguments[i]);
     }
 
-    return action.apply(this, arrayPar); 
+    return () => {
+        return action.apply(this, arrayPar); 
+    }
 }
-console.log(lazyFunction([1,2,3,4,5], 3, forLazy));
 
-let lazyAction = lazy(action, parameters);
-lazyAction();
+let lazyAction = lazy(forLazy, [1,2,3,4,5], 3);
+console.log(lazyAction());

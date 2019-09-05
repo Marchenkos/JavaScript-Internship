@@ -129,7 +129,7 @@ function memoize(action) {
 function multiplicationOfParameters(action) {
     return (...argms) => {
         let mult = 1;
-        
+
         for(let i = 0; i < argms.length; i++) {
             mult = mult * argms[i];
         }
@@ -150,15 +150,17 @@ function forLazy(arrayPar, n) {
     return newArray; 
 } 
     
-let lazyFunction = function(array, n, action) { 
+function lazy(action) { 
     let arrayPar = [];
 
-    for(let i = 0; i < arguments.length - 1; i++) {
+    for(let i = 1; i < arguments.length; i++) {
         arrayPar.push(arguments[i]);
     }
 
-    return action.apply(this, arrayPar); 
-} 
+    return () => {
+        return action.apply(this, arrayPar); 
+    }
+}
 
 class Shape {
     constructor(name) {
@@ -232,7 +234,8 @@ console.log(averageOfEven([1,2,3,4,5])(filter)(folding));
 let mult = multiplicationOfParameters(pureFunction);
 console.log(mult(10, 2, 30, 1, 4, 8));
 console.log(folding([1,2,3,4], (a, b) => a + b));
-console.log(lazyFunction([1,2,3,4,5], 3, forLazy));
+let lazyAction = lazy(forLazy, [1,2,3,4,5], 3);
+console.log(lazyAction());
 let rectangle1 = new Rectangle(5, 10);
 let rectangle2 = new Rectangle(15, 2);
 console.log("Area: " + rectangle1.calculateArea() + "\nWidth: " + rectangle1.width + "\nHeight: " + rectangle1.height);
