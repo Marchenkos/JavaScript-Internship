@@ -2,27 +2,29 @@ function pureFunction(x, y, z) {
     return (x + y + z) * 10;
 }
 
-function cury(f) {
-    return (x) => {
-        return (y) => {
-            return (z) => {
-                return f(x, y, z);
+function cylinderArea(pi) {
+    return (hight, radius) => {
+        return 2 * pi * hight * radius + 2 * pi * radius;
+    }
+}
+
+function cury(action) {
+    return (parameter1) => {
+        return (parameter2) => {
+            return (parameter3) => {
+                return action(parameter1, parameter2, parameter3);
             };
         };
     };
 }
 
-function cylinderArea(pi) {
-    return (h, r) => {
-        return 2 * pi * r * h + 2 * pi * r;
-    }
-}
+
 
 function map(array, callback) {
     let newArray = [];
 
-    for(key in array) {
-        newArray.push(callback(array[key]));
+    for(key of array) {
+        newArray.push(callback(key));
     }
     
     return newArray;
@@ -31,14 +33,13 @@ function map(array, callback) {
 function filter(array, callback) {
     let newArray = [];
 
-    for(key in array) {
+    for(key of array) {
         if(callback(array[key])) {
-            newArray.push(array[key])
+            newArray.push(key);
         }
     }
-    
-    array = newArray;
-    return array;
+        
+    return newArray;
 }
 
 function average(array) {
@@ -58,40 +59,43 @@ function folding(array, callback, initialValue) {
         lastValue = initialValue;
     }
 
-    for(key in array) {
-        lastValue = callback(lastValue, array[key]);
+    for(key of array) {
+        lastValue = callback(lastValue, key);
     }
 
     return lastValue;
 }
 
 function averageOfEven(array) {
-    return (f1) => {
-        let evenArray = f1(array, a => a % 2 == 0);
+    return (action1) => {
+        let evenArray = action1(array, a => a % 2 == 0);
 
-        return (f2) => {
-           let result = f2(evenArray, (a, b) => a + b);
+        return (action2) => {
+           let result = action2(evenArray, (a, b) => a + b);
 
            return result / evenArray.length;
         }
     }
 }
 
-function createMemoizedFunction(f) {
-    return (memoize) => {
-        let mem = memoize(f);
+function createMemoizedFunction(action) {
+    return (memoizedFunction) => {
+        let result = memoizedFunction(action);
 
-        return mem([1,2,3]);
+        return (arguments) => {
+            return result(arguments);
+        };
     }
 }
 
-function memoize(fn) {
+function memoize(action) {
     let cacheValues = new Map();
 
     return (...argms) => {
-        let parameters = [];
-        parameters = argms[0];
+        let parameters = argms[0];
 
+        console.log(parameters);
+        console.log(cacheValues);
         if(cacheValues.has(parameters.toString())) {
            console.log("From cache");
 
@@ -99,7 +103,7 @@ function memoize(fn) {
         }
         else {
            console.log("Calculating");
-           let result = fn(parameters);
+           let result = action(parameters);
            cacheValues.set(parameters.toString(), result);
            
            return result;
@@ -126,7 +130,8 @@ console.log(map([1,2,3], (a) => a - 1));
 console.log(filter([11,2,30], (a) => a > 10));
 let result2 = averageOfEven([1,2,3,4,5])(filter)(folding);
 console.log(result2);
-console.log(createMemoizedFunction(average)(memoize));
+console.log(createMemoizedFunction(average)(memoize)([1,2,3]));
+console.log(createMemoizedFunction(average)(memoize)([1,2,3]));
 let mult = multiplicationOfParameters(pureFunction);
 console.log(mult(10, 2, 30));
 console.log(folding([1,2,3,4], (a, b) => a + b));
