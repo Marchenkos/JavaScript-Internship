@@ -1,8 +1,9 @@
 function map(array, callback) {
     let newArray = [];
 
-    newArray.push(folding(array, callback));
-        // newArray.push(callback(key));
+    newArray = folding(array, callback);
+    // newArray.push(folding(array, callback));
+    //     // newArray.push(callback(key));
     
     return newArray;
 }
@@ -20,25 +21,24 @@ function filter(array, callback) {
 }
 
 function average(array) {
-    let averageValue = 0;
-
-    for(key of array) {
-        averageValue = averageValue + key;
-    }
+    let averageValue = folding(array, (a, b) => a + b);
 
     return averageValue / array.length;
 }
 
-function folding(array, callback, initialValue) {
+function folding(array, foldcCallback, initialValue) {
     let lastValue = 0;
 
     if(initialValue) {
         lastValue = initialValue;
     }
 
-    for(key of array) {
-        lastValue = callback(lastValue, key);
+    for(let i = 0; i < array.length; i++) {
+        lastValue = foldcCallback(lastValue, array[i], i);
     }
 
     return lastValue;
 }
+
+console.log(average([1, 2, 3]));
+console.log(map([1, 2, 3], (a) => a * 2));
