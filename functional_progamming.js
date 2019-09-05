@@ -30,6 +30,7 @@ function curry(action) {
         else {
             return (...moreArgs) => {
                 let newArgs = [...args, ...moreArgs];
+                
                 return returnFunction(...newArgs);
             }
         }
@@ -37,49 +38,41 @@ function curry(action) {
 }
 
 function map(array, callback) {
-    let newArray = [];
-
-    for(key of array) {
-        newArray.push(callback(key));
-    }
-    
-    return newArray;
+    return folding(array, callback);
 }
 
 function filter(array, callback) {
-    let newArray = [];
+    let newArray = [], retunAray = [];
+    newArray = folding(array, callback);
 
-    for(key of array) {
-        if(callback(key)) {
-            newArray.push(key);
+    for(let i = 0; i < array.length; i++) {
+        if(newArray[i] == true) {
+            retunAray.push(array[i])
         }
     }
     
-    return newArray;
+    return retunAray;
 }
 
 function average(array) {
-    let averageValue = 0;
+    let averageValue = folding(array, (a, b) => a + b);
 
-    for(key of array) {
-        averageValue = averageValue + key;
-    }
-
-    return averageValue / array.length;
+    return averageValue[array.length - 1] / array.length;
 }
 
-function folding(array, callback, initialValue) {
-    let lastValue = 0;
+function folding(array, foldcCallback, initialValue) {
+    let lastValue = 0, newArray = [];
 
     if(initialValue) {
         lastValue = initialValue;
     }
 
-    for(key of array) {
-        lastValue = callback(lastValue, key);
+    for(let i = 0; i < array.length; i++) {
+        lastValue = foldcCallback(array[i], lastValue);
+        newArray.push(lastValue);
     }
 
-    return lastValue;
+    return newArray;
 }
 
 function averageOfEven(array) {
@@ -224,8 +217,9 @@ let partial2 = applyPartial(pureFunction, 4);
 console.log(partial2(15, 4));
 let result = curry(pureFunction);
 console.log(result(2)(3)(5)(3)(5)(2));
-console.log(map([1,2,3], (a) => a - 1));
-console.log(filter([11,2,30], (a) => a > 2));
+console.log(map([1, 5, 10, 5, 11, 44], (a) => a * 2));
+console.log(filter([1, 5, 10, 5, 11, 44], (a) => a > 5));
+console.log(average([3, 5, 6]));
 console.log(averageOfEven([1,2,3,4,5])(filter)(folding));
 let mult = multiplicationOfParameters(pureFunction);
 console.log(mult(10, 2, 30, 1, 4, 8));

@@ -1,49 +1,41 @@
 function map(array, callback) {
-    let newArray = [], newArray2 = array.reverse();
-
-    for(let i = 0; i < array.length; i++) {
-        newArray.push(folding(newArray2, callback));
-        newArray2.pop();
-    }    
-
-    return newArray;
+    return folding(array, callback);
 }
 
 function filter(array, callback) {
-    let newArray = [];
+    let newArray = [], retunAray = [];
+    newArray = folding(array, callback);
 
-    for(key of array) {
-        if(callback(key)) {
-            newArray.push(key);
+    for(let i = 0; i < array.length; i++) {
+        if(newArray[i] == true) {
+            retunAray.push(array[i])
         }
     }
     
-    return newArray;
+    return retunAray;
 }
 
 function average(array) {
     let averageValue = folding(array, (a, b) => a + b);
 
-    return averageValue / array.length;
+    return averageValue[array.length - 1] / array.length;
 }
 
 function folding(array, foldcCallback, initialValue) {
-    let lastValue;
-    console.log(array.length);
+    let lastValue = 0, newArray = [];
 
     if(initialValue) {
         lastValue = initialValue;
     }
-    else {
-        lastValue = array[0];
-    }
 
     for(let i = 0; i < array.length; i++) {
         lastValue = foldcCallback(array[i], lastValue);
+        newArray.push(lastValue);
     }
-    console.log(lastValue);
-    return lastValue;
+
+    return newArray;
 }
 
 console.log(map([1, 5, 10, 5, 11, 44], (a) => a * 2));
-// console.log(average([3, 3]));
+console.log(filter([1, 5, 10, 5, 11, 44], (a) => a > 5));
+console.log(average([3, 5, 6]));
