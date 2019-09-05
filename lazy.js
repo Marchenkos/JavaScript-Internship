@@ -11,12 +11,8 @@ function forLazy(arrayPar, n) {
 } 
     
 function lazy(action) { 
-    let arrayPar = [];
-
-    for(let i = 1; i < arguments.length; i++) {
-        arrayPar.push(arguments[i]);
-    }
-
+    let arrayPar = Array.prototype.slice.call(arguments, 1);
+    
     return () => {
         return action.apply(this, arrayPar); 
     }
