@@ -10,9 +10,9 @@ function pureFunction(a1, a2, a3, a4, a5, a6) {
 
 function applyPartial(action) {
     let firstArguments = Array.prototype.slice.call(arguments, 1);
-    
-    return (...argms) => {
-        return action.apply(this, [...firstArguments, ...argms]);
+
+    return (...args) => {
+        return action.apply(this, [...firstArguments, ...args]);
     }
 }
 
@@ -68,15 +68,10 @@ function folding(array, foldcCallback, accumulator = 0) {
 }
 
 function averageOfEven(array) {
-    return (action1) => {
-        let evenArray = action1(array, a => a % 2 == 0);
+    let evenArray = filter(array, a => a % 2 == 0);
+    let result = average(evenArray);
 
-        return (action2) => {
-           let result = action2(evenArray);
-
-           return result;
-        }
-    }
+    return result;
 }
 
 function createMemoizedFunction(action) {
@@ -92,8 +87,8 @@ function createMemoizedFunction(action) {
 function memoize(action) {
     let cacheValues = new Map();
 
-    return (...argms) => {
-        let parameters = argms[0];
+    return (...args) => {
+        let parameters = args[0];
 
         if(cacheValues.has(parameters.toString())) {
            console.log("From cache");
@@ -111,14 +106,14 @@ function memoize(action) {
 }
 
 function multiplicationOfParameters(action) {
-    return (...argms) => {
-        let mult = 1;
+    return (...args) => {
+        let result = 1;
 
-        for(let i = 0; i < argms.length; i++) {
-            mult = mult * argms[i];
+        for(let i = 0; i < args.length; i++) {
+            result = result * args[i];
         }
 
-        return mult;
+        return result;
     }
 }
 
@@ -135,10 +130,10 @@ function forLazy(arrayPar, n) {
 } 
     
 function lazy(action) { 
-    let arrayOfPar = Array.prototype.slice.call(arguments, 1);
+    let arrayOfParameters = Array.prototype.slice.call(arguments, 1);
     
     return () => {
-        return action.apply(this, arrayOfPar); 
+        return action.apply(this, arrayOfParameters); 
     }
 }
 
@@ -211,7 +206,7 @@ console.log(result(2)(3)(5)(3)(5)(2));
 console.log(map([1, 5, 10, 5, 11, 44], (a) => a * 2));
 console.log(filter([1, 5, 10, 5, 11, 44], (a) => a > 5));
 console.log(average([1, 5, 6]));
-console.log(averageOfEven([1,2,3,4,5])(filter)(average));
+console.log(averageOfEven([1,2,3,4,5]));
 let mult = multiplicationOfParameters(pureFunction);
 console.log(mult(10, 2, 30, 1, 4, 8));
 console.log(folding([1,2,3,4], (a, b) => a + b));
