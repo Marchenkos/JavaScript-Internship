@@ -29,14 +29,13 @@ class Logger {
     
             return true;
         },
-        
-    this._addPopety = function (levelValue) {
-        this._format.level = this._level[levelValue];
-        let result = Object.keys(this._format).map(key => this._format[key]);
-        [result[1], result[2]] = [result[2],result[1]];
+        this._addPopety = function (levelValue) {
+            this._format.level = this._level[levelValue];
+            let result = Object.keys(this._format).map(key => this._format[key]);
+            [result[1], result[2]] = [result[2],result[1]];
 
-        return result;
-    }
+            return result;
+        }
     }
 
     log() {
