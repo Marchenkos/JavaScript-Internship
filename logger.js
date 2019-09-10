@@ -1,82 +1,79 @@
 class Logger {
-    constructor() {
-        this._level = ['default', 'INFO:', 'WARNING:', 'ERROR:'],
-        this.date = new Date(),
-        this._format = {
-            'date' : this.date.toLocaleString(),
-            'message' : ''
-        },
-        this._colorLevel = {
-            'INFO' : 'color: #0000FF',
-            'WARNING' : 'color: #ffc100',
-            'ERROR' : 'color: #ff1a00'
-        },
-        this._isSimpleInformation = function (information, level, color) {
-            if(information.length > 1 || Array.isArray(information[0])) {
-                this._format.message = '';
-    
-               if( level != 0) {
-                let newFormat = this._addPopety(level);
-                console.log(`%c ${newFormat.join(' ')}`, color);
-               } else {
-                console.log(Object.keys(this._format).map(key => this._format[key]).join(' '));
-               }
-    
-               console.table(information);
-    
-               return false;
-            }
-    
-            return true;
-        },
-        this._addPopety = function (levelValue) {
-            this._format.level = this._level[levelValue];
-            let result = Object.keys(this._format).map(key => this._format[key]);
-            [result[1], result[2]] = [result[2],result[1]];
-
-            return result;
-        }
+    constructor(format = '[date]: [message]') {
+      this.format = format;
+      this.date = new Date();
     }
-
-    log() {
-        if(this._isSimpleInformation(arguments, 0)) {
-            this._format.message = arguments[0];
-            console.log(Object.keys(this._format).map(key => this._format[key]).join(' '));
-        }
+  
+    _createVocabulary(message, level, color) {
+      let vocabulary = {};
+      let listProperty  = this.format.replace(':', '').split(' ');
+      listProperty.push('[color]');
+      let dateString = this.convertDateToStrring(this.date);
+      let listValue = [dateString, level, message, color];
+  
+      listProperty.forEach((value, i) => {
+        vocabulary[value] = listValue[i];
+      });
+  
+      return vocabulary;
     }
-
-    info() {
-        if(this._isSimpleInformation(arguments, 1, this._colorLevel.INFO)) {
-            this._format.message = arguments[0];
-            let newFormat = this._addPopety(1);
-            console.log(`%c ${newFormat.join(' ')}`, this._colorLevel.INFO);
-        }
+  
+    _log(message, vocabulary) {
+      if(Array.isArray(message) || typeof message === 'object') {
+        vocabulary['[message]'] = '';
+        this._format(vocabulary);
+        console.table(message);
+      } else {
+        this._format(vocabulary);
+      }
     }
-
-    error() {
-        if(this._isSimpleInformation(arguments, 2, this._colorLevel.ERROR)) {
-            this._format.message = arguments[0];
-            let newFormat = this._addPopety(2);
-            console.log(`%c ${newFormat.join(' ')}`, this._colorLevel.ERROR);
-        }
+  
+    _format(vocabulary) {
+      let newFormat = this.format;
+  
+      for(let key in vocabulary) {
+        newFormat = newFormat.replace(key, vocabulary[key]);
+      }
+  
+      console.log(`%c ${newFormat}`, vocabulary['[color]']);
     }
-
-    warning() {
-        if(this._isSimpleInformation(arguments, 3, this._colorLevel.WARNING)) {
-            this._format.message = arguments[0];
-            let newFormat = this._addPopety(3);
-            console.log(`%c ${newFormat.join(' ')}`, this._colorLevel.WARNING);
-       }   
+  
+    log(message) {
+      const color = '';
+      const level = '';
+      let vocabulary = this._createVocabulary(message, level, color);
+      this._log(message, vocabulary);
     }
-}
-
-let execution = new Logger();
-execution.log('first_el', 'second_el');
-execution.log('simple message');
-execution.log([1, 2, 3], ['array', 'array']);
-execution.info('my message');
-execution.info([1, 2, 3], ['array', 'array']);
-execution.error('my message');
-execution.error([1, 2, 3], ['array', 'array']);
-execution.warning([1, 2], ['array', 'array']);
-execution.warning('my message');
+  
+    info(message) {
+      const color = 'color: #0000FF';
+      const level = 'INFO';
+      let vocabulary = this._createVocabulary(message, level, color);
+      this._log(message, vocabulary);
+    }
+  
+    warning(message) {
+      const color = 'color: #ffc100';
+      const level = 'WARNING';
+      let vocabulary = this._createVocabulary(message, level, color);
+      this._log(message, vocabulary);
+    }
+  
+    error(message) {
+      const color = 'color: #ff1a00';
+      const level = 'ERROR';
+      let vocabulary = this._createVocabulary(message, level, color);
+      this._log(message, vocabulary);
+    }
+  
+    convertDateToStrring(date) {
+      return date.toLocaleString();
+    }
+  }
+  
+  let logger = new Logger('[date] [level]: [message]');
+  logger.log('hello');
+  logger.info('hello');
+  logger.warning({'f':'bla', 's':'blabla'});
+  logger.error('hello');
+  logger.error({'f':'bla', 's':'blabla'});
