@@ -35,10 +35,10 @@ class Logger {
 		let date = new Date();
 
 		return {
-            '[date]': this._convertDateToStrring(date),
-            '[message]': message,
-            '[level]': level,
-            '[color]': color
+		    '[date]': this._convertDateToStrring(date),
+		    '[message]': message,
+		    '[level]': level,
+		    '[color]': color
 		};
 	}
 
@@ -46,9 +46,9 @@ class Logger {
 		let vocabulary = this._createVocabulary(message, level, color);
 
 		if (Array.isArray(message) || typeof message === 'object') {
-            vocabulary['[message]'] = '';
-            console.log(`%c ${this._format(vocabulary)}`, color);
-            console.table(message);
+		    vocabulary['[message]'] = '';
+		    console.log(`%c ${this._format(vocabulary)}`, color);
+		    console.table(message);
 		} else {
 		    console.log(`%c ${this._format(vocabulary)}`, color);
 		}
