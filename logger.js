@@ -35,10 +35,10 @@ class Logger {
 		let date = new Date();
 
 		return {
-            '[date]': this._convertDateToStrring(date),
-            '[message]': message,
-            '[level]': level,
-            '[color]': color
+                '[date]': this._convertDateToStrring(date),
+                '[message]': message,
+                '[level]': level,
+                '[color]': color
 		};
 	}
 
