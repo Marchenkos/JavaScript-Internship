@@ -35,25 +35,22 @@ class Logger {
 		let date = new Date();
 
 		return {
-		'[date]': this._convertDateToStrring(date),
-		'[message]': message,
-		'[level]': level,
-		'[color]': color
+            '[date]': this._convertDateToStrring(date),
+            '[message]': message,
+            '[level]': level,
+            '[color]': color
 		};
 	}
 
 	_log(message, level, color) {
 		let vocabulary = this._createVocabulary(message, level, color);
-		let formattedString;
 
 		if (Array.isArray(message) || typeof message === 'object') {
-		vocabulary['[message]'] = '';
-		formattedString = this._format(vocabulary);
-		console.log(`%c ${formattedString}`, color);
-		console.table(message);
+            vocabulary['[message]'] = '';
+            console.log(`%c ${this._format(vocabulary)}`, color);
+            console.table(message);
 		} else {
-		formattedString = this._format(vocabulary);
-		console.log(`%c ${formattedString}`, color);
+		    console.log(`%c ${this._format(vocabulary)}`, color);
 		}
 	}
 
@@ -61,7 +58,7 @@ class Logger {
 		let formattedString = this.format;
 
 		for (let key in vocabulary) {
-		formattedString = formattedString.replace(key, vocabulary[key]);
+		    formattedString = formattedString.replace(key, vocabulary[key]);
 		}
 
 		return formattedString;
