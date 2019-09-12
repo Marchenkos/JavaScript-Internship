@@ -1,17 +1,21 @@
 class Task {
     constructor(type, shortDescription, fullDescription) {
-        this.type = type,
-        this.shortDescription = shortDescription,
-        this.fullDescription = fullDescription,
-        this.isComplete = false
+        this.type = type;
+        this.shortDescription = shortDescription;
+        this.fullDescription = fullDescription;
+        this.isComplete = false;
     }
 
     completeTask() {
         this.isComplete = true;
     }
-
-    showTask() {
-        console.log(`\nType: ${this.type}\nShort description: ${this.shortDescription}\nFull description: ${this.fullDescription}\nState: ${this._getState()}`);
+    
+    show() {
+        console.log(`
+        Type: ${this.type}
+        Short description: ${this.shortDescription}
+        Full description: ${this.fullDescription}
+        State: ${this._getState()}`);
     }
 
     _getState() {
@@ -25,8 +29,13 @@ class SingleTask extends Task {
         this.deadline = deadline;
     }
 
-    showTask() {
-        console.log(`\nType: ${this.type}\nShort description: ${this.shortDescription}\nFull description: ${this.fullDescription}\nState: ${this._getState()}\nDeadline: ${this.deadline}`);
+    show() {
+        console.log(`
+        Type: ${this.type}
+        Short description: ${this.shortDescription}
+        Full description: ${this.fullDescription}
+        State: ${this._getState()}
+        Deadline: ${this.deadline}`);
     }
 }
 
@@ -34,10 +43,6 @@ class GroupTask extends Task {
     constructor(shortDescription, fullDescription, team) {
         super('group task', shortDescription, fullDescription);
         this.team = team;
-    }
-
-    showTask() {
-        console.log(`\nType: ${this.type}\nShort description: ${this.shortDescription}\nFull description: ${this.fullDescription}\nState: ${this._getState()}\nTeam: ${this.team}`);
     }
 
     addTeamMember(teamMember) {
@@ -48,6 +53,15 @@ class GroupTask extends Task {
         if(this.team.indexOf(teamMember) > -1) {
             this.team.splice(this.team.indexOf(teamMember), 1);
         }
+    }
+
+    show() {
+        console.log(`
+        Type: ${this.type}
+        Short description: ${this.shortDescription}
+        Full description: ${this.fullDescription}
+        State: ${this._getState()}
+        Team: ${this.team}`);
     }
 }
 
@@ -66,34 +80,42 @@ class TaskList {
         }
     }
 
-    output() {
-        console.table(this.list);
+    show() {
+        this.list.forEach((task) => {
+            task.show();
+        });
     }
 
-    outputCompletedTasks() {
-        let result = this.list.filter((task) => task.isComplete == true);
-        console.table(result);
+    showCompletedTasks() {
+        this.list.forEach((task) => {
+            if(task.isComplete) {
+                task.show();
+            }
+        });
     }
 
-    outputIncompletedTasks() {
-        let result = this.list.filter((task) => task.isComplete == false);
-        console.table(result);
+    showIncompletedTasks() {
+        this.list.forEach((task) => {
+            if(!task.isComplete) {
+                task.show();
+            }
+        });
     }
 }
 
 let task1 = new GroupTask('Create a new project', 'A lot of information about this project', ['Mike', 'Anna', 'Diana']);
-task1.showTask();
+task1.show();
 let task2 = new GroupTask('Buy a cat', 'Buy a cat with Miya and Vlad', ['Miya', 'Vlad']);
 let task3 = new SingleTask('Finish task', 'ffldlfd', 'today');
 let task4 = new SingleTask('Buy a new car', 'Buy a new car after next week', 'week');
 let list = new TaskList([task1,task2,task3]);
-list.output();
+list.show();
 list.addTask(task4);
-list.output();
+list.show();
 list.removeTask(task3);
-list.output();
+list.show();
 task4.completeTask();
-list.outputCompletedTasks();
+list.showCompletedTasks();
 task2.addTeamMember('Diana');
 task1.removeTeamMember('Diana');
-list.outputIncompletedTasks();
+list.showIncompletedTasks();
