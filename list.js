@@ -81,9 +81,7 @@ class TaskList {
     }
 
     show() {
-        this.list.forEach((task) => {
-            task.show();
-        });
+        this.list.forEach((task) => task.show());
     }
 
     showCompletedTasks() {
